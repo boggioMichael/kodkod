@@ -1,0 +1,11 @@
+#!/bin/sh
+# commit-msg: enforce Conventional Commits on the subject line.
+# Allowed types and the subject length come from git config, with defaults.
+types=$(git config --get hooks.commitTypes || echo "feat|fix|docs|refactor|test|chore")
+max=$(git config --get hooks.subjectMax || echo 72)
+pattern="^($types)(\([a-z0-9-]+\))?!?: .{1,$max}\$"
+subject=$(head -n 1 "$1")
+if ! printf '%s\n' "$subject" | grep -Eq "$pattern"; then
+    echo "commit-msg: '$subject' does not match $pattern" >&2
+    exit 1
+fi

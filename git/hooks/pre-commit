@@ -1,0 +1,12 @@
+#!/bin/sh
+# pre-commit: block staged files above a size limit (bytes, from git config).
+limit=$(git config --get hooks.maxFileBytes || echo 1048576)
+too_big=$(git diff --cached --name-only --diff-filter=AM | while read -r f; do
+    size=$(git cat-file -s ":$f")
+    [ "$size" -gt "$limit" ] && echo "$f ($size bytes)"
+done)
+if [ -n "$too_big" ]; then
+    echo "pre-commit: staged files above $limit bytes:" >&2
+    echo "$too_big" >&2
+    exit 1
+fi
