@@ -1,10 +1,10 @@
 # קורס git · קודקוד, מכללת עתידים
 
-שישה מפגשים. בכל מפגש 135 דקות של עבודה חיה ב-git מול הכיתה, ו-120 דקות תרגול. מערך השיעורים המלא, עם זמנים, פקודות ושאלות לכיתה, נמצא [במסמך הקורס](https://claude.ai/artifact/GCtFFVn5V4FDjmSYFgKWkt). כאן נמצא מה שצריך להריץ.
+שישה מפגשים. בכל מפגש 135 דקות של עבודה חיה ב-git מול הכיתה, ו-120 דקות תרגול. מערך השיעורים המלא, עם זמנים, פקודות ושאלות לכיתה, נמצא ב-[`zit/plan`](../zit/plan), והמצגות ב-[`zit/slides`](../zit/slides). כאן נמצא מה שצריך להריץ.
 
 | מפגש | נושא | תרגול |
 | --- | --- | --- |
-| 1 | מה זה git, שלושת המצבים, branch ו-merge, עבודה עם אחרים, PR ו-code review | Learn Git Branching עד Push & Pull 6, ו-git-exercises 1–6 |
+| 1 | תרגיל פתיחה בלי git, מה זה git, שלושת המצבים, branch ו-merge, עבודה עם אחרים, PR ו-code review | Learn Git Branching עד Push & Pull 6, ו-git-exercises 1–6 |
 | 2 | amend, קונפליקטים, rebase, rebase אינטראקטיבי, cherry-pick ו-reflog | Learn Git Branching עד Locked Main, ושבעה תרגילי rebase ב-git-exercises |
 | 3 | מאחורי הקלעים: blob, tree, commit ו-refs. ‏GitHub, ‏GitLab ו-Bitbucket. פתיחת zit | zit: PR ראשון וקונפליקט מתוכנן |
 | 4 | stash, reset ו-revert, bisect, blame, tag, worktree, וריפו ענק | zit: ארכיטקטורה ופרוטוקול |

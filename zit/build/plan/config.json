@@ -1,0 +1,115 @@
+{
+  "sources": {
+    "dir": "../../plan",
+    "pattern": "\\.md$"
+  },
+  "output": "../../plan/zit-plan.docx",
+  "metadata": {
+    "title": "קורס Git — 6 שיעורים ופרויקט zit",
+    "creator": "מיכאל בוג׳יו",
+    "description": "תוכנית הקורס: שישה מפגשים, תרגול ופרויקט zit",
+    "language": "he-IL"
+  },
+  "page": {
+    "widthDxa": 11906,
+    "heightDxa": 16838,
+    "marginDxa": 1134
+  },
+  "fonts": {
+    "body": "Arial",
+    "code": "Courier New"
+  },
+  "sizes": {
+    "body": 22,
+    "table": 20,
+    "code": 18,
+    "inlineCodeDelta": 2,
+    "caption": 18,
+    "spacer": 8,
+    "title": 48,
+    "heading1": 36,
+    "heading2": 28,
+    "heading3": 24,
+    "heading4": 22
+  },
+  "colors": {
+    "text": "1F2328",
+    "title": "1F2A44",
+    "heading": "1F2A44",
+    "subheading": "3A4A6B",
+    "link": "1155CC",
+    "codeFill": "F3F4F6",
+    "codeBorder": "D0D7DE",
+    "inlineCodeFill": "EEF1F4",
+    "tableHeaderFill": "E8ECF3",
+    "tableBorder": "C9D1DC",
+    "caption": "57606A",
+    "rule": "C9D1DC"
+  },
+  "spacing": {
+    "line": 276,
+    "paragraphAfter": 120,
+    "listItemAfter": 60,
+    "blockGapAfter": 160,
+    "cellMargin": 80,
+    "codeBorderSpace": 4,
+    "borderSize": 4,
+    "headings": {
+      "title": {
+        "before": 0,
+        "after": 120
+      },
+      "heading1": {
+        "before": 0,
+        "after": 160
+      },
+      "heading2": {
+        "before": 320,
+        "after": 120
+      },
+      "heading3": {
+        "before": 240,
+        "after": 100
+      },
+      "heading4": {
+        "before": 200,
+        "after": 80
+      }
+    },
+    "codeLine": 250
+  },
+  "headings": {
+    "firstLevelOneAsTitle": true,
+    "pageBreakBeforeLevelOne": true
+  },
+  "lists": {
+    "indentStep": 720,
+    "hanging": 360,
+    "bulletGlyphs": [
+      "•",
+      "◦",
+      "▪"
+    ],
+    "orderedText": "%LEVEL.",
+    "levelToken": "%LEVEL",
+    "taskGlyphs": {
+      "unchecked": "☐",
+      "checked": "☑"
+    }
+  },
+  "images": {
+    "pixelsPerInch": 96,
+    "maxWidthFraction": 1
+  },
+  "tables": {
+    "minColumnChars": 4,
+    "maxColumnChars": 60,
+    "minColumnDxa": 900,
+    "charEm": 0.6
+  },
+  "scripts": {
+    "rtlCharClass": "\\u0590-\\u05FF\\uFB1D-\\uFB4F",
+    "ltrCharClass": "A-Za-z\\u00C0-\\u024F",
+    "ltrMark": "‎"
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "number": 3,
+  "title": "מאחורי הקלעים, פלטפורמות ופתיחת zit",
+  "parts": [
+    {
+      "name": "שיעור",
+      "minutes": 135,
+      "segments": [
+        {
+          "from": 0,
+          "to": 5,
+          "title": "פתיחה",
+          "ask": [
+            {
+              "q": "איפה git שומר את כל ההיסטוריה?"
+            },
+            {
+              "q": "כמה מקום תופס branch?"
+            }
+          ]
+        },
+        {
+          "from": 5,
+          "to": 20,
+          "title": "סיור ב-.git",
+          "demo": [
+            "cat .git/HEAD                # ref: refs/heads/main",
+            "cat .git/refs/heads/main     # ה-hash של ה-commit",
+            "git cat-file -t HEAD         # commit",
+            {
+              "cmd": "git cat-file -p HEAD",
+              "min": 1.5
+            },
+            {
+              "cmd": "git cat-file -p 'HEAD^{tree}'",
+              "min": 1.5
+            },
+            "git cat-file -p HEAD:calc.py",
+            "git hash-object calc.py      # אותו hash כמו ה-blob",
+            {
+              "cmd": "cp calc.py copy.py && git hash-object copy.py",
+              "min": 1.5
+            },
+            {
+              "cmd": "git branch feature && wc -c .git/refs/heads/feature   # 41",
+              "min": 1.5
+            }
+          ],
+          "notes": [
+            "ריפו חדש עם commit אחד של calc.py."
+          ]
+        },
+        {
+          "from": 20,
+          "to": 44,
+          "title": "אובייקטים ו-commit ביד",
+          "say": [
+            "תוכן זהה ← אותו hash ← נשמר פעם אחת, בכל מחשב",
+            "branch הוא קובץ של 41 בתים עם hash ← כמעט חינם",
+            "שינוי של בית אחד משנה את ה-hash ← אובייקט פגום מתגלה מיד"
+          ],
+          "demo": [
+            "echo \"hello from plumbing\" | git hash-object -w --stdin",
+            "git update-index --add --cacheinfo 100644,<blob>,hello.txt",
+            "git write-tree",
+            {
+              "cmd": "echo \"Add hello.txt by hand\" | git commit-tree <tree> -p HEAD",
+              "min": 1.5
+            },
+            "git update-ref refs/heads/main <commit>",
+            "git log --oneline",
+            "git status --short           #  D hello.txt",
+            "git restore hello.txt"
+          ],
+          "ask": [
+            {
+              "q": "הקובץ קיים ב-commit וב-staging, אבל מעולם לא היה בתיקייה. מה git יגיד?",
+              "a": " D: מבחינתו הקובץ נמחק מהתיקייה"
+            }
+          ]
+        },
+        {
+          "from": 44,
+          "to": 60,
+          "title": "packfiles וריפו ענק",
+          "demo": [
+            "git count-objects -v        # count: 6",
+            "git gc",
+            "git count-objects -v        # in-pack: 6, packs: 1",
+            {
+              "cmd": "git verify-pack -v .git/objects/pack/*.idx | head -5",
+              "min": 1.5
+            }
+          ],
+          "say": [
+            "blob הוא הקובץ כולו. סרט של 4GB ששונה 10 פעמים = 10 blobs ענקיים, ו-clone מוריד את כולם",
+            "דחיסת הפרשים עוזרת לטקסט, וכמעט לא לווידאו"
+          ],
+          "ask": [
+            {
+              "q": "למה git משתמש ב-hash כשם של אובייקט?",
+              "a": "אותו שם בכל מחשב, בדיקת שלמות וחיסכון במקום"
+            },
+            {
+              "q": "שיניתי אות אחת בקובץ של 1GB. כמה מקום חדש נוסף?",
+              "a": "blob מלא חדש, עד ש-gc אולי ידחס"
+            },
+            {
+              "q": "מישהו שינה בית אחד בתוך אובייקט בשרת. מה יקרה ב-clone הבא?",
+              "a": "ה-hash לא מתאים, ו-git מזהה"
+            },
+            {
+              "q": "אם השם נגזר מהתוכן, משנה מאיזה מחשב מורידים את הקובץ?",
+              "a": "לא. זו נקודת הפתיחה של zit"
+            }
+          ]
+        },
+        {
+          "from": 60,
+          "to": 70,
+          "title": "הפסקה",
+          "break": true
+        },
+        {
+          "from": 70,
+          "to": 85,
+          "title": "GitHub, GitLab ו-Bitbucket",
+          "say": [
+            "שלושתן מאחסנות ריפו ומוסיפות בקשת מיזוג, review, CI והרשאות. ה-PR הוא פיצ'ר של הפלטפורמה, לא של git",
+            {
+              "text": "Microsoft / GitLab Inc. / Atlassian · PR / MR / PR · Actions / GitLab CI/CD / Pipelines · Enterprise Server / Self-Managed / Data Center",
+              "min": 4
+            },
+            "Atlassian מסיימת את Data Center ב-28 במרץ 2029, אבל Bitbucket Data Center הוחרג"
+          ],
+          "ask": [
+            {
+              "q": "GitHub נפל לשעה. מה נעצר ומה ממשיך?",
+              "a": "commits מקומיים ממשיכים. PR ו-CI נעצרים"
+            },
+            {
+              "q": "למה בנק או חברת ביטחון תתקין GitLab בשרת משלה?"
+            }
+          ]
+        },
+        {
+          "from": 85,
+          "to": 125,
+          "title": "השקת zit",
+          "say": [
+            {
+              "text": "שאלת פתיחה: סטודיו משחקים עם ריפו של 2TB. מה קורה ב-git clone של עובד חדש?",
+              "min": 4
+            },
+            {
+              "text": "הבעיה: clone מוריד הכול. LFS ו-partial clone עדיין תלויים בשרת אחד",
+              "min": 5
+            },
+            {
+              "text": "הרעיון: הקבצים מפוזרים בין המחשבים, וה-hash מאמת כל קובץ שמגיע",
+              "min": 3
+            },
+            {
+              "text": "מה מגישים: README, architecture, protocol, feature, 3 ADR, research, tag v1.0 והצגה. מימוש = בונוס",
+              "min": 5
+            },
+            {
+              "text": "איך עובדים: main מוגן, branch לכל שינוי, issue לכל משימה, rebase בקונפליקט, 5 PRs ו-5 reviews לכל חבר",
+              "min": 5
+            },
+            {
+              "text": "אבני דרך: מה ממוזג בסוף כל מפגש",
+              "min": 3
+            },
+            {
+              "text": "מחוון: התהליך ב-git שוקל הכי הרבה",
+              "min": 3
+            },
+            {
+              "text": "פיצ'ר מיוחד: דוגמה אחת בלבד, zit where <file>. השאר על הצוותים",
+              "min": 3
+            },
+            {
+              "text": "שאלות",
+              "min": 7
+            }
+          ],
+          "notes": [
+            "מקרינים את פרק הפרויקט במסמך."
+          ]
+        },
+        {
+          "from": 125,
+          "to": 135,
+          "title": "צוותים",
+          "say": [
+            {
+              "text": "חלוקה לשלישיות",
+              "min": 4
+            },
+            {
+              "text": "כל צוות מקבל ריפו מתבנית הפרויקט בארגון של הקורס",
+              "min": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "תרגול",
+      "minutes": 120,
+      "segments": [
+        {
+          "from": 0,
+          "to": 20,
+          "title": "הקמת הריפו",
+          "tasks": [
+            {
+              "text": "clone לכל חבר",
+              "min": 5
+            },
+            {
+              "text": "בודקים ש-main מוגן",
+              "min": 5
+            },
+            {
+              "text": "קוראים את CONTRIBUTING.md",
+              "min": 8
+            }
+          ]
+        },
+        {
+          "from": 20,
+          "to": 50,
+          "title": "קונפליקט מתוכנן",
+          "tasks": [
+            {
+              "text": "כל אחד מוסיף שורה ל-TEAM.md (שם, תפקיד ותחום) ב-branch משלו, ופותח PR",
+              "min": 12
+            },
+            {
+              "text": "אחרי שה-PR הראשון ממוזג: git fetch origin ← git rebase origin/main ← פותרים ← git add TEAM.md ← git rebase --continue ← git push --force-with-lease",
+              "min": 15
+            }
+          ],
+          "check": "אחרי הדחיפה מבקשים review מחדש"
+        },
+        {
+          "from": 50,
+          "to": 80,
+          "title": "הבעיה במילים שלנו",
+          "tasks": [
+            {
+              "text": "פסקה ב-README.md, ב-PR אחד",
+              "min": 20
+            },
+            {
+              "text": "כולם סוקרים",
+              "min": 8
+            }
+          ]
+        },
+        {
+          "from": 80,
+          "to": 120,
+          "title": "issues ומחקר",
+          "tasks": [
+            {
+              "text": "חמישה issues לתחומי התכנון: אחסון, איתור, checkout, push ושכפול, אמינות",
+              "min": 10
+            },
+            {
+              "text": "כל חבר חוקר כלי אחד (git-annex, Git LFS, partial clone, Scalar, IPFS) וכותב פסקה ב-docs/research.md",
+              "min": 28
+            }
+          ],
+          "check": "ארבעה PRs ממוזגים לפחות. כל חבר כתב PR אחד וסקר אחד, ואין אף commit ישיר ל-main"
+        }
+      ]
+    }
+  ],
+  "cheatsheet": [
+    [
+      "cat .git/HEAD",
+      "לאיזה branch HEAD מצביע"
+    ],
+    [
+      "git cat-file -t <obj>",
+      "סוג האובייקט: blob, tree, commit"
+    ],
+    [
+      "git cat-file -p <obj>",
+      "תוכן האובייקט"
+    ],
+    [
+      "git hash-object <file>",
+      "ה-hash של קובץ"
+    ],
+    [
+      "git hash-object -w --stdin",
+      "לשמור תוכן כ-blob"
+    ],
+    [
+      "git write-tree / git commit-tree",
+      "לבנות tree ו-commit ביד"
+    ],
+    [
+      "git update-ref refs/heads/main <sha>",
+      "להזיז branch"
+    ],
+    [
+      "git count-objects -v",
+      "כמה אובייקטים ומה גודלם"
+    ],
+    [
+      "git gc",
+      "לארוז אובייקטים ל-packfile"
+    ],
+    [
+      "git verify-pack -v <idx>",
+      "מה יש בתוך pack"
+    ],
+    [
+      "PR (GitHub, Bitbucket) = MR (GitLab)",
+      "בקשת מיזוג"
+    ]
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "number": 5,
+  "title": "hooks, הגנות ריפו וקונבנציות של צוותים מובילים",
+  "parts": [
+    {
+      "name": "שיעור",
+      "minutes": 135,
+      "segments": [
+        {
+          "from": 0, "to": 5, "title": "פתיחה",
+          "ask": [ { "q": "איך מוודאים שאף אחד לא דוחף סיסמה, או הודעת commit גרועה?", "min": 3 } ]
+        },
+        {
+          "from": 5, "to": 28, "title": "git hooks",
+          "say": [
+            "hook הוא סקריפט ש-git מריץ ברגע מסוים, ויכול לעצור אותו",
+            ".git/hooks לא נכנס ל-commit ← מחזיקים את ה-hooks ב-.githooks ומפנים עם core.hooksPath",
+            "הכללים מגיעים מ-git config: hooks.commitTypes, hooks.subjectMax, hooks.maxFileBytes"
+          ],
+          "demo": [
+            { "step": "מראים את .githooks/commit-msg (Conventional Commits)", "min": 3 },
+            { "step": "מראים את .githooks/pre-commit (גודל קובץ)", "min": 3 },
+            { "cmd": "chmod +x .githooks/* && git config core.hooksPath .githooks", "min": 1.5 },
+            "git commit -am \"added stuff\"                  # נדחה",
+            "git commit -am \"feat(calc): add w constant\"   # עובר",
+            { "cmd": "git add big.bin && git commit -m \"chore: add big file\"   # נדחה", "min": 1.5 },
+            { "cmd": "git commit -am \"bad message\" --no-verify      # עובר!", "min": 1.5 },
+            { "step": "השורה האחרונה היא הנקודה: hook מקומי הוא עזרה, לא אכיפה. אכיפה בשרת (pre-receive, או כללים ב-GitHub)", "min": 1.5 }
+          ],
+          "ask": [
+            { "q": "חבר חדש עשה clone. האם ה-hooks עובדים אצלו?", "a": "רק אחרי core.hooksPath. לכן זה נכנס ל-CONTRIBUTING.md" },
+            { "q": "מה עוד כדאי לבדוק ב-pre-commit?", "a": "סיסמאות, רווחים מיותרים, סימוני קונפליקט שנשכחו" }
+          ]
+        },
+        {
+          "from": 28, "to": 43, "title": "webhooks",
+          "say": [
+            "webhook הוא הודעת HTTP ש-GitHub שולח אחרי שאירוע כבר קרה",
+            "שימושים: CI, הודעה לצ'אט, עדכון מערכת משימות, פריסה"
+          ],
+          "demo": [
+            { "step": "Settings ← Webhooks ← Add webhook: כתובת כלשהי, application/json, רק push", "min": 3 },
+            { "step": "דוחפים commit", "min": 1 },
+            { "step": "Recent deliveries: הכותרות, ה-payload והתשובה. נשמר 3 ימים, גם בלי שרת בצד השני", "min": 3 }
+          ],
+          "ask": [
+            { "q": "מה ההבדל בין pre-receive ל-webhook?", "a": "pre-receive רץ לפני העדכון ויכול לחסום. webhook מודיע אחרי שזה קרה" }
+          ]
+        },
+        {
+          "from": 43, "to": 63, "title": "כללים וחסימות",
+          "say": [
+            "בחשבון חינמי, כללי ההגנה עובדים רק בריפו ציבורי",
+            { "text": "כללים על main: PR עם אישור, פתרון שיחות, בדיקות סטטוס, בלי force push ומחיקה, היסטוריה ליניארית, חתימות", "min": 5 },
+            "rulesets: כמה יחד והמחמיר מנצח, עקיפה לתפקידים, כיבוי בלי מחיקה",
+            "את מה שה-hook בודק מקומית אוכפים בשרת עם בדיקת סטטוס חובה, למשל GitHub Action",
+            "CODEOWNERS: /docs/protocol.md @moshe ← review אוטומטי. עם Require review from Code Owners האישור חובה",
+            "push protection עוצר טוקנים לפני שהם נדחפים לריפו ציבורי"
+          ],
+          "demo": [
+            { "step": "ruleset על main של calc-demo ← git push origin main נדחה, והשינוי חייב לעבור ב-PR", "min": 4 }
+          ]
+        },
+        { "from": 63, "to": 73, "title": "הפסקה", "break": true },
+        {
+          "from": 73, "to": 88, "title": "עבודת צוות ב-GitHub",
+          "say": [
+            "הרשאות: Read, Triage, Write, Maintain, Admin. החניכים Write, אני Admin",
+            "issue לכל משימה. Closes #12 בתיאור ה-PR סוגר אותה במיזוג",
+            ".github/pull_request_template.md: מה שינית, למה, איך בדקת",
+            "draft PR כדי לקבל כיוון מוקדם",
+            { "text": "שיטת מיזוג אחת לצוות: merge commit, squash או rebase. מכבים את השאר בהגדרות", "min": 3 }
+          ],
+          "ask": [
+            { "q": "עם squash, מה קורה ל-commits הקטנים שכתבתם בתוך ה-PR? מתי זה טוב, ומתי חבל?" }
+          ]
+        },
+        {
+          "from": 88, "to": 118, "title": "קונבנציות",
+          "say": [
+            { "text": "הקרנל: שינוי לוגי אחד בכל patch, נבנה אחרי כל patch, ציווי, Signed-off-by, Fixes:", "min": 3 },
+            { "text": "Chris Beams: נושא עד 50 תווים, אות גדולה, בלי נקודה, ציווי; גוף שנשבר ב-72", "min": 2 },
+            { "text": "Conventional Commits: type(scope): description. feat = MINOR, fix = PATCH, ! = MAJOR", "min": 3 },
+            "הסתירה: Beams מבקש אות גדולה, Conventional מתחיל בסוג קטן. בוחרים אחת ואוכפים ב-hook",
+            { "text": "GitHub flow: branch קצר, PR, review, מיזוג ומחיקה. רוב הצוותים, וגם zit", "min": 2 },
+            { "text": "Trunk-based: כולם משלבים ל-main לעתים קרובות, עבודה לא גמורה מאחורי feature flags. כך Google", "min": 2 },
+            { "text": "Git flow: develop, release ו-hotfix קבועים. לתוכנה עם גרסאות מפורשות", "min": 2 },
+            { "text": "review: Google מאשרת שינוי שמשפר בוודאות את בריאות הקוד, ו-Nit: להערה לא חשובה", "min": 3 }
+          ],
+          "ask": [
+            { "q": "למה דווקא הקרנל מתעקש שכל patch ייבנה?", "a": "אחרת bisect נתקע באמצע" },
+            { "q": "מה מרוויחים מ-feat ו-fix בהודעה?", "a": "אפשר להפיק changelog ומספר גרסה אוטומטית" },
+            { "q": "איזו אסטרטגיה מתאימה לצוות של שלושה אנשים בשבועיים?" }
+          ]
+        },
+        {
+          "from": 118, "to": 135, "title": "בחירת קונבנציה",
+          "say": [
+            { "text": "כל צוות בוחר קונבנציית commit ושיטת מיזוג, ורושם ב-CONTRIBUTING.md", "min": 10 },
+            { "text": "הסבר על התרגול: hooks, ruleset, CODEOWNERS ו-feature.md", "min": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "תרגול",
+      "minutes": 120,
+      "segments": [
+        {
+          "from": 0, "to": 25, "title": "hooks",
+          "tasks": [
+            { "text": ".githooks/commit-msg ו-.githooks/pre-commit", "min": 12 },
+            { "text": "הוראה ל-core.hooksPath ב-CONTRIBUTING.md", "min": 4 },
+            { "text": "כל חבר מראה commit עם הודעה גרועה שנדחה", "min": 6 }
+          ]
+        },
+        {
+          "from": 25, "to": 45, "title": "ruleset על main",
+          "tasks": [
+            { "text": "PR עם אישור, בלי force push ובלי מחיקה, פתרון כל השיחות", "min": 12 },
+            { "text": "הוכחה: git push origin main נדחה", "min": 4 }
+          ]
+        },
+        {
+          "from": 45, "to": 60, "title": "CODEOWNERS ותבנית PR",
+          "tasks": [
+            { "text": "CODEOWNERS: כל חבר בעלים על מסמך אחד", "min": 6 },
+            { "text": ".github/pull_request_template.md", "min": 5 },
+            { "text": "הוכחה: PR שנוגע במסמך מבקש review מהבעלים לבד", "min": 3 }
+          ]
+        },
+        {
+          "from": 60, "to": 120, "title": "feature.md",
+          "tasks": [
+            { "text": "הבעיה וסיפור משתמש", "min": 15 },
+            { "text": "התכנון ודוגמת שימוש", "min": 25 },
+            { "text": "החלטת תכנון שלישית (ADR)", "min": 10 },
+            { "text": "PR שממוזג עם שני אישורים", "min": 8 }
+          ],
+          "notes": [ "אתגר: GitHub Action שבודק את הודעות ה-commit ב-PR, מוגדר כבדיקת סטטוס חובה. מסלול למתקדמים: GitMastery (Git Mastery, Team Collaboration, Git Workflows)." ]
+        }
+      ]
+    }
+  ],
+  "cheatsheet": [
+    ["git config core.hooksPath .githooks", "להפעיל hooks מתוך הריפו"],
+    ["chmod +x .githooks/*", "להפוך hooks לניתנים להרצה"],
+    ["git commit --no-verify", "עוקף hooks, ולכן אכיפה בשרת"],
+    ["type(scope): description", "Conventional Commits: feat, fix, docs, refactor, test, chore"],
+    ["git commit -s", "מוסיף Signed-off-by"],
+    [".github/CODEOWNERS", "מי מאשר אילו קבצים"],
+    [".github/pull_request_template.md", "תבנית PR"],
+    ["Closes #12", "סוגר issue במיזוג"],
+    ["Settings ← Rules ← Rulesets", "כללי הגנה על main"],
+    ["Settings ← Webhooks ← Recent deliveries", "מה GitHub שלח ומה חזר"],
+    ["merge commit / squash / rebase", "שלוש שיטות מיזוג"]
+  ]
+}

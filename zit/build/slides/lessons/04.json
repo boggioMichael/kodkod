@@ -1,0 +1,162 @@
+{
+  "number": 4,
+  "title": "ארגז כלים מתקדם ועבודה על zit",
+  "parts": [
+    {
+      "name": "שיעור",
+      "minutes": 135,
+      "segments": [
+        {
+          "from": 0, "to": 5, "title": "פתיחה",
+          "ask": [ { "q": "save-your-work משיעור 1: מי מצא את הכלי?", "a": "git stash", "min": 3 } ]
+        },
+        {
+          "from": 5, "to": 13, "title": "stash",
+          "say": [ "stash הוא מדף לעבודה באמצע. -u כולל קבצים חדשים" ],
+          "demo": [
+            { "cmd": "git stash push -u -m \"half-done example\"", "min": 1.5 },
+            "git status --short           # נקי",
+            "git stash list",
+            "git stash pop"
+          ]
+        },
+        {
+          "from": 13, "to": 25, "title": "reset ו-revert",
+          "say": [
+            { "text": "--soft: ה-commit מבוטל, השינויים staged ← לכתוב commit מחדש", "min": 1 },
+            { "text": "ברירת המחדל (mixed): staging ריק, הקבצים נשארים ← לפצל commit", "min": 1 },
+            { "text": "--hard: ה-commit והשינויים נמחקים ← בזהירות", "min": 1 },
+            { "text": "revert: commit הפוך ← לביטול commit שכבר נדחף", "min": 1 }
+          ],
+          "demo": [
+            "git reset --soft HEAD~1    # M  calc.py (staged)",
+            "git reset HEAD             #  M calc.py (unstaged)",
+            "git reset --hard HEAD      # נקי",
+            { "cmd": "git revert --no-edit HEAD  # Revert \"Add y\"", "min": 1.5 }
+          ],
+          "ask": [ { "q": "reset או revert על commit שכבר ב-main המשותף?", "a": "revert" } ]
+        },
+        {
+          "from": 25, "to": 40, "title": "bisect",
+          "say": [ "בריפו 10 commits אחרי v1.0, ואחד מהם שובר את add()" ],
+          "demo": [
+            { "step": "ידני: git bisect start ← git bisect good / bad עד שנמצא", "min": 4 },
+            { "step": "test.sh: python3 -B -c \"import calc; assert calc.add(2, 3) == 5\"", "min": 1.5 },
+            "git bisect start HEAD v1.0",
+            { "cmd": "git bisect run ./test.sh    # ... is the first bad commit", "min": 1.5 },
+            "git bisect reset"
+          ],
+          "ask": [
+            { "q": "bisect מצא באג מתוך 1,000 commits בכ-10 צעדים. למה?", "a": "חיפוש בינארי" },
+            { "q": "מה חייב להיות נכון בכל commit כדי ש-bisect יעבוד?", "a": "שהקוד נבנה ורץ אחרי כל commit" }
+          ],
+          "notes": [ "הדגל -B חשוב: בלעדיו Python עלול להשתמש ב-.pyc ישן, ו-bisect מצביע על commit לא נכון." ]
+        },
+        {
+          "from": 40, "to": 46, "title": "blame ו-log",
+          "say": [ "מי כתב כל שורה ובאיזה commit, ומתי נכנס טקסט" ],
+          "demo": [
+            { "cmd": "git blame -L 1,2 calc.py", "min": 1.5 },
+            { "cmd": "git log -S \"a - b\" --oneline", "min": 1.5 },
+            { "cmd": "git log -p --follow calc.py", "min": 1.5 }
+          ]
+        },
+        {
+          "from": 46, "to": 51, "title": "tag",
+          "say": [ "tag מוער הוא שם קבוע לגרסה" ],
+          "demo": [
+            "git tag -a v1.0 -m \"First release\"",
+            "git push origin v1.0",
+            "git describe              # v1.0-1-g8e0613c"
+          ]
+        },
+        {
+          "from": 51, "to": 55, "title": "worktree",
+          "say": [ "שני branches פתוחים בשתי תיקיות, בלי stash" ],
+          "demo": [
+            { "cmd": "git worktree add ../hotfix -b hotfix v1.0", "min": 1.5 },
+            { "cmd": "git worktree list", "min": 0.5 },
+            { "cmd": "git worktree remove ../hotfix", "min": 0.5 }
+          ]
+        },
+        {
+          "from": 55, "to": 67, "title": "ריפו ענק",
+          "say": [ "ריפו בדיקה עם קובץ בינארי של 3MB שהוחלף פעם אחת. בשרת המקומי: git -C big.git config uploadpack.allowFilter true" ],
+          "demo": [
+            { "cmd": "git clone <url> full                               # 6.0M", "min": 1.5 },
+            { "cmd": "git clone --filter=blob:none --sparse <url> lazy   # 200K", "min": 1.5 },
+            { "cmd": "git sparse-checkout set docs                       # 212K", "min": 1.5 },
+            { "cmd": "git sparse-checkout disable                        # 3.1M", "min": 1.5 },
+            { "cmd": "git clone --depth 1 <url> shallow                  # 3.1M", "min": 1.5 }
+          ],
+          "ask": [
+            { "q": "partial clone מוריד blobs לפי הצורך. מאיפה, ומה קורה כשהשרת הזה למטה?", "a": "משרת אחד, והעבודה נעצרת. זו בדיוק הבעיה ש-zit פותר" }
+          ]
+        },
+        { "from": 67, "to": 77, "title": "הפסקה", "break": true },
+        {
+          "from": 77, "to": 135, "title": "עבודה על zit",
+          "say": [
+            { "text": "היעד לסוף המפגש: architecture.md עם Mermaid, טיוטת protocol.md, 2 ADR ו-issue עם הצעת פיצ'ר", "min": 3 }
+          ],
+          "demo": [
+            { "step": "review חי: מקרין PR פתוח אחד מכל צוות (בהסכמה), 5 דקות לצוות: מה ברור, מה חסר, איך נראית הערה טובה", "min": 30 },
+            { "step": "בין לבין עובר בין הצוותים", "min": 20 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "תרגול",
+      "minutes": 120,
+      "segments": [
+        {
+          "from": 0, "to": 10, "title": "חלוקת עבודה",
+          "tasks": [ { "text": "issue לכל משימה, ואחראי לכל issue", "min": 10 } ]
+        },
+        {
+          "from": 10, "to": 55, "title": "architecture.md",
+          "tasks": [
+            { "text": "הרכיבים, מה כל מחשב שומר, והמסלול של clone, checkout, commit ו-push", "min": 25 },
+            { "text": "תרשים Mermaid של הרכיבים", "min": 10 },
+            { "text": "PR ו-review", "min": 8 }
+          ]
+        },
+        {
+          "from": 55, "to": 90, "title": "protocol.md (טיוטה)",
+          "tasks": [
+            { "text": "איך מחשב מוצא מי מחזיק אובייקט", "min": 12 },
+            { "text": "איך מעבירים אותו, ואיך מוודאים את ה-hash", "min": 13 },
+            { "text": "PR ו-review", "min": 8 }
+          ]
+        },
+        {
+          "from": 90, "to": 110, "title": "החלטות תכנון והצעת פיצ'ר",
+          "tasks": [
+            { "text": "שתי החלטות תכנון (ADR) ב-docs/decisions/", "min": 12 },
+            { "text": "issue עם הצעה לפיצ'ר המיוחד, עם התווית proposal", "min": 6 }
+          ]
+        },
+        {
+          "from": 110, "to": 120, "title": "סגירה",
+          "tasks": [ { "text": "כל חבר כתב עוד שני PRs וסקר עוד שניים, הכול ממוזג", "min": 10 } ],
+          "notes": [ "מסלול למתקדמים: GitMastery (Undoing Commits, Git Stash, Advanced Git Techniques, Git Archaeology). bisect בלי רשת: git-katas, bisect ו-Bad-commit." ]
+        }
+      ]
+    }
+  ],
+  "cheatsheet": [
+    ["git stash push -u -m \"...\" / git stash pop", "לשים עבודה בצד / להחזיר"],
+    ["git reset --soft HEAD~1", "לבטל commit, השינויים staged"],
+    ["git reset HEAD~1", "לבטל commit, השינויים בתיקייה"],
+    ["git reset --hard HEAD~1", "לזרוק commit ושינויים (זהירות)"],
+    ["git revert <sha>", "commit הפוך, בטוח אחרי push"],
+    ["git bisect start <bad> <good> / run <script> / reset", "חיפוש בינארי של באג"],
+    ["git blame -L 1,10 <file>", "מי כתב כל שורה"],
+    ["git log -S \"text\"", "מתי טקסט נכנס או יצא"],
+    ["git tag -a v1.0 -m \"...\" ← git push origin v1.0", "גרסה"],
+    ["git worktree add ../dir -b <branch>", "branch נוסף בתיקייה נפרדת"],
+    ["git clone --filter=blob:none --sparse <url>", "clone בלי blobs"],
+    ["git sparse-checkout set <dir>", "רק תיקיות מסוימות"]
+  ]
+}
