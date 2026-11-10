@@ -34,8 +34,8 @@ https://codespaces.new/boggioMichael/kodkod?quickstart=1
 ```
 .devcontainer/   הגדרת הסביבה, וההתקנה שרצה פעם אחת
 tools/           העזרים של הטרמינל: demo, graph, watch-graph
-git/             קורס git: הכנת ההדגמות לכל מפגש, ו-hooks
-zit/             פרויקט הסיכום של קורס git, ותבנית לצוותים
+git/             ההדגמות של קורס git לכל מפגש, ו-hooks
+zit/             קורס git: מערך השיעורים, מצגות, תרגילים, ופרויקט הסיכום עם תבנית לצוותים
 ```
 
 שאר התיקיות (cicd, ‏general_devops, ‏hypervision, ‏kubernetes, ‏nox, ‏os, ‏security) הן הנושאים הבאים במכללה, וכל נושא חדש מקבל תיקייה משלו בשורש. כלי חדש נכנס לרשימה `APT_PACKAGES` ב-`.devcontainer/post-create.sh`, ואחרי שינוי בסביבה מריצים ב-VS Code את הפקודה Codespaces: Rebuild Container.

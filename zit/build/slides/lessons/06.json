@@ -1,0 +1,68 @@
+{
+  "number": 6,
+  "title": "סגירת גרסאות והצגות",
+  "parts": [
+    {
+      "name": "מפגש",
+      "minutes": 255,
+      "segments": [
+        {
+          "from": 0, "to": 45, "title": "הקפאה ושחרור",
+          "say": [ "PRs אחרונים עד דקה 30, ואז שחרור" ],
+          "demo": [
+            { "step": "הצוותים סוגרים PRs אחרונים", "min": 30 },
+            "git switch main && git pull",
+            { "cmd": "git log --oneline --first-parent main   # כל שורה = PR", "min": 2 },
+            "git tag -a v1.0 -m \"zit v1.0\"",
+            "git push origin v1.0",
+            { "step": "GitHub Release מה-tag, עם הערות שחרור", "min": 3 },
+            { "step": "הבדיקה שלי, דקה לריפו: בצוות של squash או merge commit, שורה בלי מספר PR = commit שעקף את התהליך", "min": 3 }
+          ]
+        },
+        { "from": 45, "to": 55, "title": "הפסקה", "break": true },
+        {
+          "from": 55, "to": 145, "title": "הצגות",
+          "say": [
+            { "text": "6 צוותים × 15 דקות: 10 הצגה ו-5 שאלות", "min": 90 },
+            { "text": "1. הבעיה (דקה) · 2. הארכיטקטורה ומסלול zit checkout (3) · 3. הפיצ'ר המיוחד (2) · 4. סיור בריפו: log --graph, PR עם review, קונפליקט, tag (3) · 5. מה הלאה (דקה)", "min": 0 }
+          ],
+          "ask": [
+            { "q": "המחשב היחיד שמחזיק קובץ כבוי. מה קורה ב-zit checkout?", "min": 0 },
+            { "q": "איך אתם יודעים שהקובץ שהגיע ממחשב אחר לא שונה בדרך?", "min": 0 },
+            { "q": "כמה מקום בדיסק תופס checkout של ריפו עם מיליון קבצים?", "min": 0 },
+            { "q": "איזו החלטת תכנון (ADR) הייתם משנים היום, ולמה?", "min": 0 },
+            { "q": "איזה PR היה הכי קשה לסגור?", "min": 0 },
+            { "q": "תראו לי מי כתב את השורה הזו, ובאיזה PR.", "a": "git blame, ואז ה-PR ב-GitHub", "min": 0 }
+          ],
+          "notes": [ "עם פחות צוותים, הזמן שמתפנה עובר ל-review בין צוותים." ]
+        },
+        { "from": 145, "to": 160, "title": "הפסקה", "break": true },
+        {
+          "from": 160, "to": 220, "title": "review בין צוותים",
+          "say": [
+            { "text": "רשות. כל צוות עושה fork לריפו של צוות אחר", "min": 5 },
+            { "text": "פותח שני issues ו-PR אחד עם הצעה", "min": 35 },
+            { "text": "הצוות המארח סוקר ועונה", "min": 20 }
+          ]
+        },
+        {
+          "from": 220, "to": 255, "title": "סיכום הקורס",
+          "say": [
+            { "text": "מה היה הכי קשה? סבב קצר", "min": 12 },
+            { "text": "משוב לכל צוות", "min": 15 },
+            { "text": "המשך למידה עצמית: GitMastery ו-git-katas", "min": 5 }
+          ]
+        }
+      ]
+    }
+  ],
+  "cheatsheet": [
+    ["git log --oneline --graph", "סיור בהיסטוריה"],
+    ["git log --oneline --first-parent main", "שורה לכל מיזוג ל-main"],
+    ["git tag -a v1.0 -m \"...\"", "tag מוער לגרסה"],
+    ["git push origin v1.0", "לדחוף את ה-tag"],
+    ["GitHub ← Releases ← Draft a new release", "Release מה-tag, עם הערות"],
+    ["git blame <file>", "מי כתב שורה, ואז ה-PR ב-GitHub"],
+    ["מבנה ההצגה", "הבעיה · ארכיטקטורה · פיצ'ר · סיור בריפו · מה הלאה"]
+  ]
+}

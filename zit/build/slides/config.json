@@ -1,0 +1,152 @@
+{
+  "paths": {
+    "lessons": "lessons",
+    "lessonPattern": "^\\d+\\.json$",
+    "outputDir": "../../slides",
+    "report": "out/timing.json",
+    "manifest": "out/manifest.json"
+  },
+  "meta": {
+    "author": "מיכאל בוג׳יו",
+    "company": "קורס Git",
+    "language": "he-IL",
+    "ltrLanguage": "en-US"
+  },
+  "estimate": {
+    "say": 1.5,
+    "cmd": 1,
+    "step": 1.5,
+    "ask": 2,
+    "failOnOverrun": true
+  },
+  "labels": {
+    "say": "אומר",
+    "demo": "מדגים",
+    "ask": "שואל",
+    "tasks": "מה עושים",
+    "check": "בודקים",
+    "answers": "תשובות",
+    "unit": "דק׳",
+    "lesson": "שיעור",
+    "time": "זמן",
+    "topic": "נושא",
+    "minutes": "דקות",
+    "cheatsheet": "Cheatsheet",
+    "command": "פקודה",
+    "meaning": "מה היא עושה",
+    "cards": "מי עושה מה"
+  },
+  "format": {
+    "range": "{from}-{to}",
+    "meta": "{part} · {range} · {minutes} {unit}",
+    "deckKicker": "{lesson} {number}",
+    "fileTitle": "{lesson} {number} - {title}",
+    "partLine": "{name} {minutes} {unit}",
+    "partsJoin": " · ",
+    "agendaTitle": "{name} · {minutes} {unit}",
+    "task": "{min} {unit} · {text}",
+    "question": "{n}. {text}",
+    "answer": "{n}. {text}",
+    "cheatTitle": "{cheatsheet} · {lesson} {number}",
+    "footer": "{lesson} {number}"
+  },
+  "bidi": {
+    "rtlCharClass": "\\u0590-\\u05FF\\uFB1D-\\uFB4F",
+    "ltrCharClass": "A-Za-z\\u00C0-\\u024F",
+    "lrm": "\u200e",
+    "rlm": "\u200f",
+    "rtlEmbed": "\u202b",
+    "embedEnd": "\u202c",
+    "flowMarker": "←",
+    "ltrFlowMarker": "→",
+    "sentencePunctuation": ".,:;!?",
+    "commentMark": "#",
+    "numericRangeDashes": "\u2013\u2014",
+    "numericRangeSeparator": "-",
+    "bracketPairs": [
+      "()",
+      "[]",
+      "{}"
+    ],
+    "prefixJoiners": "-\u05be"
+  },
+  "theme": {
+    "name": "Plain",
+    "headFontFace": "Arial",
+    "bodyFontFace": "Arial",
+    "complexScriptFont": "Arial",
+    "complexScripts": [
+      "Hebr"
+    ],
+    "colors": {
+      "dk1": "111111",
+      "lt1": "FFFFFF",
+      "dk2": "111111",
+      "lt2": "F2F2F2",
+      "accent1": "6B6B6B",
+      "accent2": "1A5FB4",
+      "accent3": "9A9A9A",
+      "accent4": "DDDDDD",
+      "accent5": "444444",
+      "accent6": "EEEEEE",
+      "hlink": "1A5FB4",
+      "folHlink": "6B6B6B"
+    }
+  },
+  "fonts": {
+    "code": "Courier New"
+  },
+  "metrics": {
+    "bodyCharEm": 0.47,
+    "codeCharEm": 0.6,
+    "boldScale": 1.27,
+    "wrapSlack": 1.06,
+    "lineSpacing": 1.2,
+    "paragraphGap": 0.3
+  },
+  "layout": {
+    "width": 10,
+    "height": 5.625,
+    "marginX": 0.5,
+    "metaY": 0.12,
+    "metaH": 0.3,
+    "titleY": 0.38,
+    "titleH": 0.95,
+    "bodyY": 1.42,
+    "bodyBottom": 5.1,
+    "footerY": 5.22,
+    "footerH": 0.25,
+    "bulletIndent": 15
+  },
+  "sizes": {
+    "deckKicker": 66,
+    "deckTitle": 34,
+    "deckTitleMin": 24,
+    "deckParts": 18,
+    "title": 54,
+    "titleMin": 34,
+    "meta": 14,
+    "label": 13,
+    "bodyMax": 20,
+    "bodyMin": 12,
+    "codeMax": 18,
+    "codeMin": 10,
+    "tableMax": 18,
+    "tableMin": 11,
+    "footer": 10,
+    "bodyTarget": 17,
+    "cheatTarget": 15
+  },
+  "table": {
+    "rowPad": 0.07,
+    "cellPadX": 0.24,
+    "minColChars": 3,
+    "maxColChars": 60
+  },
+  "pathKeys": [
+    "lessons",
+    "outputDir",
+    "report",
+    "manifest"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "zit-course-build",
+  "private": true,
+  "description": "Builds the zit course slides and the Word copy of the plan",
+  "scripts": {
+    "slides": "node slides/build-slides.js slides/config.json",
+    "plan": "node plan/build-docx.js plan/config.json",
+    "build": "npm run slides && npm run plan"
+  },
+  "dependencies": {
+    "docx": "9.8.1",
+    "marked": "18.0.10",
+    "pptxgenjs": "4.0.1"
+  }
+}

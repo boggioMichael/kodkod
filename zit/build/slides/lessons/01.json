@@ -1,0 +1,506 @@
+{
+ "number": 1,
+ "title": "יסודות: מה זה git ואיך עובדים איתו בצוות",
+ "parts": [
+  {
+   "name": "שיעור",
+   "minutes": 135,
+   "segments": [
+    {
+     "from": 0,
+     "to": 11,
+     "title": "בלי git",
+     "say": [
+      {
+       "text": "שלישיות. כל אחד משלים פונקציה אחת ב-Calc.java, ומוסיף את השם שלו לשורת Authors",
+       "min": 0.5
+      },
+      {
+       "text": "מסנכרנים איך שרוצים: וואטסאפ, דרייב. כל אחד מריץ אצלו",
+       "min": 0.5
+      },
+      {
+       "text": "בעוד 8 דקות: קובץ אחד לצוות, שמדפיס 5, 12 ו-32, ושלושה שמות ב-Authors",
+       "min": 0.5
+      }
+     ],
+     "demo": [
+      {
+       "step": "שולחים את Calc.java לקבוצה",
+       "min": 0.5
+      },
+      "javac Calc.java && java Calc",
+      {
+       "step": "עבודה בצוותים. הכרטיסים נשארים על המסך",
+       "min": 8
+      }
+     ],
+     "cards": [
+      "א' · add: מחזירה a + b",
+      "ב' · mul: מחזירה a * b, רק בעזרת add",
+      "ג' · power: מחזירה a בחזקת b, רק בעזרת mul",
+      "כולם · מוסיפים את השם לשורת Authors"
+     ],
+     "notes": [
+      "לפני השיעור: קבוצת וואטסאפ או תיקיית דרייב לכיתה עם Calc.java, ו-javac שעובד בכל מחשב.",
+      "לא מזכירים git עד סוף התרגיל, ולא עוזרים לצוותים להסתנכרן.",
+      "המלכודת: ב' לא יכול לבדוק את mul בלי add של א', ו-ג' צריך את שתיהן. קבצים עוברים הלוך ושוב באמצע העבודה, וכל העברה דורסת משהו. עותק בלי add מדפיס 0, 0, 0 גם כש-mul ו-power נכונות.",
+      "דקה 7: \"ראש הצוות מבקש: add נקראת מעכשיו sum.\" כל מי שקורא ל-add צריך לעדכן, וקובץ ישן כבר לא מתקמפל.",
+      "דקה 11: כל צוות שולח לקבוצה קובץ אחד, עם שם הצוות."
+     ]
+    },
+    {
+     "from": 11,
+     "to": 17,
+     "title": "מה קרה?",
+     "demo": [
+      {
+       "step": "פותחים את הקובץ הסופי של 2-3 צוותים",
+       "min": 1
+      },
+      "javac Calc.java && java Calc"
+     ],
+     "ask": [
+      {
+       "q": "מי חיכה לקוד של מי, ואיך הוא הגיע אליו?",
+       "a": "ב' ו-ג' לא יכלו לבדוק בלי הקוד של א', וקבצים שלמים עברו הלוך ושוב. ב-git: pull מביא רק את מה שחברים כבר דחפו",
+       "min": 1
+      },
+      {
+       "q": "מה הקובץ הסופי הדפיס, וכמה שמות יש בשורת Authors?",
+       "a": "0 במקום שבו שינוי של חבר נדרס, ושם אחד ב-Authors. ב-git: merge מאחד לבד שורות שונות, ועל אותה שורה עוצר ושואל (קונפליקט, שיעור 2)",
+       "min": 1
+      },
+      {
+       "q": "מה קרה כש-add הפכה ל-sum?",
+       "a": "קבצים ישנים קוראים ל-add ולא מתקמפלים. ב-git: השינוי וכל הקריאות לפונקציה נכנסים ב-commit אחד, וכולם מושכים אותו יחד",
+       "min": 1
+      },
+      {
+       "q": "מי שינה את add לאחרונה, ואיך חוזרים לגרסה שעבדה?",
+       "a": "אין דרך לדעת. ב-git: כל commit שומר מי, מתי ולמה, ואפשר לחזור לכל אחד מהם",
+       "min": 1
+      }
+     ],
+     "notes": [
+      "קובץ אופייני: 0, 0, 0 בגלל add שאבדה, או שגיאת קומפילציה cannot find symbol על add אחרי השינוי ל-sum.",
+      "צוות שהצליח: מי איחד ביד, ואיך ידע שלא הלך משהו לאיבוד? ומה יהיה עם 30 אנשים?",
+      "המעבר להמשך: עכשיו בונים מחשבון עם git (calc.py)."
+     ]
+    },
+    {
+     "from": 17,
+     "to": 26,
+     "title": "מה זה git",
+     "say": [
+      "git שומר צילום (snapshot) של כל הפרויקט בכל commit: מי, מתי ולמה",
+      "בכל מחשב יש עותק מלא של ההיסטוריה. git לא צריך שרת",
+      "GitHub הוא אתר שמאחסן ריפו ומוסיף PR, issues והרשאות"
+     ],
+     "demo": [
+      "git config --global user.name \"Your Name\"",
+      "git config --global user.email \"you@example.com\"",
+      "git config --global init.defaultBranch main",
+      "git config --global pull.rebase false"
+     ],
+     "notes": [
+      "כל חניך מריץ את ההגדרות פעם אחת.",
+      "בלי pull.rebase, הפקודה git pull על branch שהתפצל נכשלת עם fatal: Need to specify how to reconcile divergent branches. בשיעור 2 מחליפים ל-true."
+     ]
+    },
+    {
+     "from": 26,
+     "to": 56,
+     "title": "שלושת המצבים",
+     "say": [
+      "תיקיית העבודה ← staging ← commit (מראים את התרשים)",
+      "git restore --staged מוציא מ-staging בלי למחוק. git restore זורק שינוי שלא נכנס ל-commit"
+     ],
+     "demo": [
+      "mkdir calc && cd calc",
+      {
+       "step": "כותבים calc.py עם add()",
+       "min": 2
+      },
+      "git init",
+      "git status                 # ?? calc.py",
+      "git add calc.py",
+      "git status                 # A  calc.py",
+      "git commit -m \"Add calculator with add()\"",
+      {
+       "step": "מוסיפים sub() ויוצרים .env עם סיסמה",
+       "min": 2
+      },
+      "git status                 #  M calc.py   ?? .env",
+      "git diff",
+      "git add calc.py",
+      "git diff --staged",
+      "git restore --staged calc.py",
+      "echo \".env\" > .gitignore",
+      "git add .gitignore calc.py",
+      "git commit -m \"Add sub() and ignore .env\"",
+      "git log --oneline",
+      {
+       "step": "מוחקים שורה בטעות ← git restore calc.py",
+       "min": 1.5
+      }
+     ],
+     "ask": [
+      {
+       "q": "למה צריך staging, ולא commit ישר על כל השינויים?",
+       "a": "כדי לבנות commit של שינוי אחד"
+      },
+      {
+       "q": "לפני git restore calc.py: השינוי לא נמצא באף commit. לאן הוא ילך?",
+       "a": "נמחק לתמיד"
+      },
+      {
+       "q": "סיסמה נכנסה ל-commit, וב-commit הבא מחקנו אותה. האם היא עדיין בריפו?",
+       "a": "כן, בהיסטוריה"
+      }
+     ]
+    },
+    {
+     "from": 56,
+     "to": 74,
+     "title": "branch ו-merge",
+     "demo": [
+      "git switch -c add-mul",
+      {
+       "step": "מוסיפים mul()",
+       "min": 1
+      },
+      "git commit -am \"Add mul()\"",
+      "git switch main",
+      {
+       "cmd": "git merge add-mul          # Fast-forward",
+       "min": 1.5
+      },
+      "git branch -d add-mul",
+      "git switch -c add-div",
+      {
+       "step": "מוסיפים div()",
+       "min": 1
+      },
+      "git commit -am \"Add div()\"",
+      "git switch main",
+      {
+       "step": "כותבים README.md ← git add ← git commit",
+       "min": 1.5
+      },
+      {
+       "cmd": "git merge add-div          # Merge made by the 'ort' strategy",
+       "min": 1.5
+      },
+      {
+       "cmd": "git log --oneline --graph --all",
+       "min": 1.5
+      }
+     ],
+     "ask": [
+      {
+       "q": "לפני ה-merge הראשון: האם ייווצר commit חדש?",
+       "a": "לא. main פשוט מתקדם קדימה",
+       "min": 1
+      },
+      {
+       "q": "ומה עכשיו, כששני הצדדים התקדמו?",
+       "a": "merge commit עם שני הורים",
+       "min": 1
+      }
+     ]
+    },
+    {
+     "from": 74,
+     "to": 84,
+     "title": "הפסקה",
+     "break": true
+    },
+    {
+     "from": 84,
+     "to": 104,
+     "title": "עבודה עם אחרים",
+     "say": [
+      "remote הוא כתובת של ריפו אחר. push שולח, pull מושך"
+     ],
+     "demo": [
+      "git remote add origin https://github.com/<org>/calc-demo.git",
+      {
+       "cmd": "git push -u origin main",
+       "min": 1.5
+      },
+      "cd .. && git clone https://github.com/<org>/calc-demo.git calc-moshe",
+      {
+       "step": "ב-calc-moshe: משנים README.md ← commit ← push",
+       "min": 2
+      },
+      {
+       "step": "ב-calc: משנים calc.py ← commit",
+       "min": 1.5
+      },
+      {
+       "cmd": "git push                   # ! [rejected] (fetch first)",
+       "min": 1.5
+      },
+      {
+       "cmd": "git pull                   # ממזג את העבודה של משה",
+       "min": 1.5
+      },
+      "git push",
+      "git log --oneline --graph -6"
+     ],
+     "ask": [
+      {
+       "q": "לפני ה-push השני: מה יקרה?",
+       "a": "נדחה, כי בשרת יש עבודה שאין אצלנו"
+      },
+      {
+       "q": "מה ההבדל בין git fetch ל-git pull?",
+       "a": "pull = fetch ואז merge"
+      },
+      {
+       "q": "אם GitHub נמחק מחר, מה מההיסטוריה הולך לאיבוד?",
+       "a": "כלום: כל clone מלא"
+      }
+     ],
+     "notes": [
+      "לפני השיעור: לוודא ש-git push ל-GitHub עובד מהמחשב שלך (התחברות), אחרת הקטע הזה חורג.",
+      "עדיף חניך מתנדב שדוחף מהמחשב שלו במקום calc-moshe.",
+      "אם הרשת נופלת: git init --bare ../server.git ישמש כשרת מקומי."
+     ]
+    },
+    {
+     "from": 104,
+     "to": 128,
+     "title": "PR ו-code review",
+     "demo": [
+      "git switch main && git pull",
+      "git switch -c fix-div-by-zero",
+      {
+       "step": "מוסיפים בדיקה של חלוקה באפס ומריצים",
+       "min": 2
+      },
+      "git commit -m \"Handle division by zero\"",
+      "git push -u origin fix-div-by-zero",
+      {
+       "step": "פותחים PR: מה השתנה, למה, איך בדקתי. Closes #1",
+       "min": 3
+      },
+      {
+       "step": "בתור סוקר: הערה על שורה ← Request changes",
+       "min": 2.5
+      },
+      {
+       "step": "בתור כותב: commit ו-push לאותו branch ← ה-PR מתעדכן",
+       "min": 2
+      },
+      {
+       "step": "Approve ← מיזוג ← מחיקת ה-branch",
+       "min": 1.5
+      },
+      "git switch main && git pull && git branch -d fix-div-by-zero"
+     ],
+     "say": [
+      "ב-review: השינוי עושה מה שה-PR מבטיח, ורק את זה? שמות ברורים? מקרה קצה?",
+      "הערה שלא חובה לתקן מסמנים Nit:. מאשרים כשהשינוי משפר, גם אם לא מושלם"
+     ],
+     "ask": [
+      {
+       "q": "מה גודל טוב ל-PR?"
+      },
+      {
+       "q": "איך כותבים הערה על הקוד בלי לפגוע בכותב?"
+      }
+     ],
+     "notes": [
+      "אותו תהליך ב-GitHub CLI: gh pr create --fill, gh pr checkout 1, gh pr review --approve, gh pr merge --squash --delete-branch",
+      "שלוש שיטות המיזוג של GitHub: בשיעור 5."
+     ]
+    },
+    {
+     "from": 128,
+     "to": 135,
+     "title": "סיכום",
+     "say": [
+      {
+       "text": "הלולאה היומית: main ← pull ← branch חדש ← עריכה ← add ו-commit ← push ← PR ← review ← מיזוג ← מחיקת ה-branch ← pull",
+       "min": 2
+      },
+      {
+       "text": "commit קטן של שינוי אחד, branch לכל שינוי, ושום דבר לא נכנס ל-main בלי review",
+       "min": 1.5
+      }
+     ],
+     "demo": [
+      {
+       "step": "מעבר לתרגול: חברותות, המשחק ואז git-exercises",
+       "min": 1.5
+      }
+     ],
+     "notes": [
+      "הלולאה לפי GitHub flow. כל שלב בה עונה על משהו מהלוח של תרגיל הפתיחה."
+     ]
+    }
+   ]
+  },
+  {
+   "name": "תרגול",
+   "minutes": 120,
+   "segments": [
+    {
+     "from": 0,
+     "to": 5,
+     "title": "פתיחת התרגול",
+     "tasks": [
+      {
+       "text": "חברותות: אחד מקליד, אחד מכוון, ומתחלפים בכל שלב",
+       "min": 2
+      },
+      {
+       "text": "פותחים learngitbranching.js.org וכותבים levels",
+       "min": 3
+      }
+     ]
+    },
+    {
+     "from": 5,
+     "to": 55,
+     "title": "Learn Git Branching",
+     "tasks": [
+      {
+       "text": "Main ← Introduction Sequence, שלבים 1–4",
+       "min": 18
+      },
+      {
+       "text": "Main ← Moving and Staging Work, שלבים 3–4",
+       "min": 10
+      },
+      {
+       "text": "Remote ← Push & Pull, שלבים 1–6",
+       "min": 22
+      }
+     ],
+     "check": "עוצרים לפני שלב 7 ב-Push & Pull. הוא פותח את שיעור 2"
+    },
+    {
+     "from": 55,
+     "to": 70,
+     "title": "git-exercises: התקנה",
+     "tasks": [
+      {
+       "text": "git clone https://gitexercises.fracz.com/git/exercises.git",
+       "min": 3
+      },
+      {
+       "text": "git config user.name \"nickname\" (כינוי: השם מופיע ברבים באתר)",
+       "min": 2
+      },
+      {
+       "text": "git config user.email ← ./configure.sh (ב-Windows ב-Git Bash)",
+       "min": 5
+      },
+      {
+       "text": "git start",
+       "min": 2
+      }
+     ],
+     "notes": [
+      "אם האתר חסום: git-katas מקומית, שבעת הראשונים ב-Basic Track, מ-basic-commits עד merge-mergesort."
+     ]
+    },
+    {
+     "from": 70,
+     "to": 115,
+     "title": "git-exercises: תרגילים 1–6",
+     "tasks": [
+      {
+       "text": "1 master, 2 commit-one-file, 3 commit-one-file-staged",
+       "min": 15
+      },
+      {
+       "text": "4 ignore-them, 5 chase-branch",
+       "min": 14
+      },
+      {
+       "text": "6 merge-conflict: קונפליקט ראשון, לפני שלמדנו אותו",
+       "min": 15
+      }
+     ],
+     "check": "git verify אחרי כל תרגיל, ואז git start next",
+     "notes": [
+      "תרגילים 22–23 (find-swearwords, find-bug) לא מתאימים לקבוצה. לא נוגעים בהם."
+     ]
+    },
+    {
+     "from": 115,
+     "to": 120,
+     "title": "סיום",
+     "tasks": [
+      {
+       "text": "בודקים ב-My progress ששישה תרגילים פתורים",
+       "min": 2
+      },
+      {
+       "text": "מי שסיים: 7 save-your-work, או GitMastery (Introduction to Git, File Operations, Working with Branches, Merging Branches)",
+       "min": 3
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "cheatsheet": [
+  [
+   "git init",
+   "ריפו חדש בתיקייה"
+  ],
+  [
+   "git status",
+   "מה השתנה ומה ב-staging"
+  ],
+  [
+   "git add <file>",
+   "להכניס ל-staging"
+  ],
+  [
+   "git restore --staged <file>",
+   "להוציא מ-staging"
+  ],
+  [
+   "git restore <file>",
+   "לזרוק שינוי שלא נשמר"
+  ],
+  [
+   "git diff / git diff --staged",
+   "מה השתנה / מה ייכנס ל-commit"
+  ],
+  [
+   "git commit -m \"...\"",
+   "לשמור צילום עם הסבר"
+  ],
+  [
+   "git log --oneline --graph --all",
+   "ההיסטוריה כגרף"
+  ],
+  [
+   "git switch -c <name>",
+   "branch חדש"
+  ],
+  [
+   "git merge <branch>",
+   "למזג branch"
+  ],
+  [
+   "git clone <url>",
+   "להעתיק ריפו"
+  ],
+  [
+   "git push / git pull",
+   "לשלוח / למשוך"
+  ],
+  [
+   ".gitignore",
+   "קבצים ש-git מתעלם מהם"
+  ]
+ ]
+}

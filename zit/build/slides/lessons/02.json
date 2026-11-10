@@ -1,0 +1,209 @@
+{
+  "number": 2,
+  "title": "amend, קונפליקטים, rebase ו-cherry-pick",
+  "parts": [
+    {
+      "name": "שיעור",
+      "minutes": 135,
+      "segments": [
+        {
+          "from": 0, "to": 8, "title": "פתיחה",
+          "say": [
+            { "text": "מי סיים את merge-conflict ב-git-exercises? מה בלבל?", "min": 4 },
+            "שני אנשים דחפו לאותו branch. איך מחברים? merge מוכר, היום דרך נוספת"
+          ],
+          "notes": [ "ממשיכים באותו ריפו calc משיעור 1." ]
+        },
+        {
+          "from": 8, "to": 20, "title": "amend",
+          "demo": [
+            "git commit -am \"Pirnt sub example\"",
+            "git commit --amend -m \"Print a sub() example\"",
+            { "step": "שכחנו קובץ: git add TODO.txt", "min": 1 },
+            "git commit --amend --no-edit",
+            "git show --stat HEAD"
+          ],
+          "say": [
+            "מראים את ה-hash לפני ואחרי: amend יוצר commit חדש במקום הישן",
+            "לכן amend רק לפני push"
+          ],
+          "ask": [
+            { "q": "שינינו רק את ההודעה. למה ה-hash השתנה?", "a": "ההודעה היא חלק מתוכן ה-commit. התשובה המלאה בשיעור 3" }
+          ]
+        },
+        {
+          "from": 20, "to": 50, "title": "קונפליקטים",
+          "demo": [
+            "git switch -c better-add",
+            { "step": "משנים ל-return float(a) + float(b) ← commit", "min": 1.5 },
+            "git switch main",
+            { "step": "משנים ל-return round(a + b, 2) ← commit", "min": 1.5 },
+            { "cmd": "git merge better-add       # CONFLICT (content)", "min": 1.5 },
+            "git status --short         # UU calc.py",
+            { "step": "קוראים יחד את הסימונים: <<<<<<< HEAD, =======, >>>>>>> better-add", "min": 3 },
+            "git merge --abort",
+            "git merge better-add",
+            { "step": "פותרים: return round(float(a) + float(b), 2)", "min": 2 },
+            "git add calc.py",
+            "git commit --no-edit",
+            "git log --oneline --graph -5",
+            { "step": "עורך ה-merge של VS Code: Accept Current, Incoming, Both", "min": 3 }
+          ],
+          "ask": [
+            { "q": "מי צודק, HEAD או better-add?", "a": "שניהם. וכשלא בטוחים, שואלים את מי שכתב" },
+            { "q": "למה git לא פותר לבד?", "a": "אותה שורה שונתה בשתי דרכים, ו-git לא מבין משמעות" },
+            { "q": "לפני git add: מה git עדיין לא יודע?", "a": "שסיימנו לפתור" },
+            { "q": "איך מקטינים קונפליקטים?", "a": "PR קטן, branch קצר חיים, pull לעתים קרובות" }
+          ]
+        },
+        { "from": 50, "to": 60, "title": "הפסקה", "break": true },
+        {
+          "from": 60, "to": 90, "title": "rebase",
+          "demo": [
+            "git switch -c docs",
+            { "step": "מוסיפים ל-README שורת Usage ← commit", "min": 1 },
+            "git switch main",
+            { "step": "מוסיפים ל-README שורת License ← commit", "min": 1 },
+            "git switch docs",
+            { "cmd": "git rebase main            # CONFLICT", "min": 1.5 },
+            { "step": "פותרים ← git add README.md", "min": 1.5 },
+            "git rebase --continue",
+            { "cmd": "git log --oneline --graph -4", "min": 1.5 },
+            "git push -u origin docs",
+            "git commit --amend -m \"Document usage in README\"",
+            "git push                   # ! [rejected] (non-fast-forward)",
+            "git push --force-with-lease",
+            { "step": "\"משה\" דוחף commit ל-docs מתיקייה שנייה", "min": 2 },
+            "git commit --amend -m \"Document usage and license\"",
+            { "cmd": "git push --force-with-lease   # ! [rejected] (stale info)", "min": 1.5 },
+            "git config --global pull.rebase true"
+          ],
+          "say": [
+            "קו ישר, בלי merge commit, ול-commit יש hash חדש",
+            "כלל הזהב: לא עושים rebase ל-commits שכבר אצל אחרים. על branch שלך: --force-with-lease, לא --force"
+          ],
+          "ask": [
+            { "q": "מה ההבדל בגרף בין merge ל-rebase?" },
+            { "q": "למה ה-hash של \"Document usage\" השתנה?" },
+            { "q": "מה היה קורה עם --force רגיל?", "a": "ה-commit של משה היה נמחק מהשרת" }
+          ]
+        },
+        {
+          "from": 90, "to": 110, "title": "rebase אינטראקטיבי",
+          "demo": [
+            "git switch -c mod",
+            { "step": "מוסיפים mod() עם באג (a // b) ← commit", "min": 1 },
+            { "step": "מתעדים את mod() ב-README ← commit", "min": 1 },
+            { "step": "מתקנים ל-a % b", "min": 0.5 },
+            "git commit -a --fixup HEAD~1",
+            { "cmd": "git rebase -i --autosquash HEAD~3", "min": 2 },
+            "git log --oneline -3"
+          ],
+          "say": [
+            { "text": "git rebase -i HEAD~3 רגיל: pick, reword, edit, squash, fixup, drop, והזזת שורות", "min": 4 },
+            "תיקון שנוגע באותן שורות של ה-commit שבאמצע יוצר קונפליקט באמצע ה-rebase"
+          ],
+          "ask": [
+            { "q": "למה מנקים היסטוריה לפני PR?", "a": "הסוקר קורא סיפור ברור" },
+            { "q": "מתי אסור?", "a": "אחרי שמישהו בנה על ה-commits האלה" }
+          ]
+        },
+        {
+          "from": 110, "to": 119, "title": "cherry-pick",
+          "demo": [
+            "git switch main",
+            "git cherry-pick -x mod~1",
+            "git log -1 --format=%B    # (cherry picked from commit ...)"
+          ],
+          "say": [
+            "תיקון דחוף צריך להגיע ל-main, ושאר ה-branch עוד לא מוכן",
+            "-x רושם בהודעה מאיפה ה-commit הגיע"
+          ],
+          "ask": [
+            { "q": "מה החיסרון?", "a": "שני commits עם אותו שינוי ו-hash שונה. merge מאוחר יותר עלול להתבלבל" }
+          ]
+        },
+        {
+          "from": 119, "to": 128, "title": "reflog",
+          "demo": [
+            "git reset --hard HEAD~1   # \"אוי, מחקתי commit\"",
+            "git log --oneline -2",
+            { "cmd": "git reflog -3", "min": 1.5 },
+            "git reset --hard HEAD@{1}",
+            "git log --oneline -2"
+          ],
+          "say": [
+            "reflog זוכר לאן HEAD הצביע, ולכן commit ש\"נעלם\" עדיין שם",
+            "reflog קיים רק במחשב שלך. הוא לא עובר ב-push"
+          ]
+        },
+        {
+          "from": 128, "to": 135, "title": "איזה כלי מתי",
+          "say": [
+            { "text": "טעות ב-commit האחרון, לפני push ← git commit --amend", "min": 0.75 },
+            { "text": "שני branches שינו אותן שורות ← פתרון קונפליקט ו-git add", "min": 0.75 },
+            { "text": "לעדכן branch מ-main בלי merge commit ← git rebase main", "min": 0.75 },
+            { "text": "לסדר commits לפני PR ← git rebase -i", "min": 0.75 },
+            { "text": "להעביר commit אחד ל-branch אחר ← git cherry-pick -x", "min": 0.75 },
+            { "text": "דחיפה אחרי rebase של branch שלך ← git push --force-with-lease", "min": 0.75 },
+            { "text": "\"מחקתי משהו\" ← git reflog", "min": 0.75 }
+          ],
+          "demo": [ { "step": "מעבר לתרגול", "min": 1 } ]
+        }
+      ]
+    },
+    {
+      "name": "תרגול",
+      "minutes": 120,
+      "segments": [
+        {
+          "from": 0, "to": 5, "title": "פתיחת התרגול",
+          "tasks": [ { "text": "חברותות, ממשיכים מאותו מקום ב-learngitbranching.js.org", "min": 5 } ]
+        },
+        {
+          "from": 5, "to": 55, "title": "Learn Git Branching",
+          "tasks": [
+            { "text": "Main ← Ramping Up, שלבים 1–4: detached HEAD, ^ ו-~, ביטול שינויים", "min": 18 },
+            { "text": "Main ← Moving and Staging Work, שלבים 1–2: cherry-pick ו-rebase אינטראקטיבי", "min": 10 },
+            { "text": "Main ← A Mixed Bag, שלבים 1–3", "min": 12 },
+            { "text": "Remote ← Push & Pull, שלבים 7–8: היסטוריה שהתפצלה ו-main נעול", "min": 10 }
+          ]
+        },
+        {
+          "from": 55, "to": 115, "title": "git-exercises: rebase",
+          "tasks": [
+            { "text": "בתיקיית exercises: git start fix-typo", "min": 2 },
+            { "text": "1 fix-typo, 2 too-many-commits", "min": 12 },
+            { "text": "3 invalid-order, 4 fix-old-typo (edit)", "min": 17 },
+            { "text": "5 commit-lost (reflog)", "min": 8 },
+            { "text": "6 pick-your-features", "min": 10 },
+            { "text": "7 rebase-complex, הקשה מכולם", "min": 10 }
+          ],
+          "check": "git start <name> קופץ ישר לתרגיל לפי שם",
+          "notes": [ "רמז למי שתקוע ב-7: לצייר את הגרף על דף, ואז לקרוא על git rebase --onto. הפקודה מקבלת בסיס חדש, בסיס ישן ו-branch." ]
+        },
+        {
+          "from": 115, "to": 120, "title": "סיום",
+          "tasks": [
+            { "text": "קריטריון: שבעת התרגילים פתורים, וכל אחד מסביר במשפט מתי rebase ומתי merge", "min": 3 },
+            { "text": "מי שסיים: Advanced Topics ב-LGB, או GitMastery ← Rebasing", "min": 2 }
+          ]
+        }
+      ]
+    }
+  ],
+  "cheatsheet": [
+    ["git commit --amend -m \"...\"", "לתקן את ה-commit האחרון"],
+    ["git commit --amend --no-edit", "להוסיף קבצים ל-commit האחרון"],
+    ["git merge --abort", "לבטל merge באמצע"],
+    ["git add <file> ← git commit", "לסיים פתרון קונפליקט"],
+    ["git rebase main", "להעביר את ה-branch לקצה של main"],
+    ["git rebase --continue / --abort", "להמשיך / לבטל rebase"],
+    ["git rebase -i HEAD~3", "לסדר, לאחד ולשנות commits"],
+    ["git commit --fixup <sha>", "תיקון שייבלע ב-commit עם --autosquash"],
+    ["git cherry-pick -x <sha>", "להעתיק commit בודד"],
+    ["git push --force-with-lease", "דחיפה בטוחה אחרי rebase"],
+    ["git reflog", "לאן HEAD הצביע: מציל commits \"שנמחקו\""],
+    ["git reset --hard HEAD@{1}", "לחזור למצב הקודם"]
+  ]
+}
