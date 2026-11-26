@@ -1,3 +1,10 @@
-#!/bash/python
+#!/usr/bin/env python3
 
-print "asdf"
+def yo():
+    pass 
+
+"""
+second change
+"""
+def main():
+    print("asdf")
